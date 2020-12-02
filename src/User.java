@@ -1,8 +1,11 @@
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private Long id;
     private String login;
     private String password;
     private String name;
+    private String message;
 
     public User(Long id, String login, String password, String name) {
         this.id = id;
@@ -11,7 +14,20 @@ public class User {
         this.name = name;
     }
 
+    public User(String login, String message) {
+        this.login = login;
+        this.message = message;
+    }
+
     public User() {
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Long getId() {
@@ -49,5 +65,9 @@ public class User {
     @Override
     public String toString() {
         return id + " " + login;
+    }
+
+    public String message(){
+        return login + ": " + message;
     }
 }

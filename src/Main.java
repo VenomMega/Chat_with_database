@@ -1,3 +1,6 @@
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -58,6 +61,9 @@ public class Main {
         }
     }
     private static void log(String loginn, String passwordd){
+        if (passwordd.equals("admin")){
+            adminPanel();
+        }
         User u = new User();
         try{
             Statement statement = connection.createStatement();
@@ -72,6 +78,19 @@ public class Main {
                 String name = resultSet.getString("name");
                 if (password.equals(passwordd)){
                     System.out.println("Good");
+                    Socket socket = new Socket("127.0.0.1", 1400);
+                    ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+                    ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+                    while (true){
+                        Scanner sc = new Scanner(System.in);
+                        System.out.println("Insert message");
+                        String message = sc.nextLine();
+                        User user = new User(login, message);
+                        outputStream.writeObject(user);
+                        if ((user = (User) inputStream.readObject())!= null){
+                            System.out.println(user.getMessage());
+                        }
+                    }
                 } else System.out.println("bad");
             }
 
